@@ -1,4 +1,15 @@
-function TodoTableRow() {
-  return <div className="">TodoTableRow </div>;
+import { useEffect } from 'react';
+import { TodoTableRowProps } from '../../types/todo';
+
+function TodoTableRow({ todos }: TodoTableRowProps) {
+  const { id, date, label, priority, todo } = todos;
+  return (
+    <div key={id}>
+      <span>{todo}</span>
+      <span>{label}</span>
+      {/* <span>{date}</span> */}
+      <span>{priority}</span>
+    </div>
+  );
 }
 export default TodoTableRow;

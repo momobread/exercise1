@@ -1,7 +1,4 @@
-import axios from 'axios';
-import { useEffect } from 'react';
-
 function HomePage() {
-  return <div className="">dsss</div>;
+  return <div className="">HomePage </div>;
 }
 export default HomePage;
