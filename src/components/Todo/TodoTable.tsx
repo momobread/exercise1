@@ -15,7 +15,7 @@ const TodoTableLayout = styled.ul`
   }
 
   /* div:nth-child(1) {
-    background-color: #747264;
+    background-color:git #747264;
   }
 
   div {
