@@ -2,7 +2,8 @@ interface TodoType {
   id?: number;
   todo: string;
   label: string;
-  date: Date;
+  date: Date | string;
+  // date: string;
   priority: string;
 }
 

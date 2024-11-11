@@ -7,7 +7,7 @@ function TodoTableRow({ todos }: TodoTableRowProps) {
     <div key={id}>
       <span>{todo}</span>
       <span>{label}</span>
-      {/* <span>{date}</span> */}
+      {typeof date === 'string' && <span>{date}</span>}
       <span>{priority}</span>
     </div>
   );
