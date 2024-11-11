@@ -7,7 +7,7 @@ interface TodoType {
 }
 
 interface TodoTableRowProps {
-  todos: TodoType[];
+  todos: TodoType;
 }
 
 export type { TodoType, TodoTableRowProps };
