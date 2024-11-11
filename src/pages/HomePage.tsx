@@ -1,4 +1,6 @@
+import DatePicker from 'react-datepicker';
+
 function HomePage() {
-  return <div className="">HomePage </div>;
+  return <div className=""></div>;
 }
 export default HomePage;

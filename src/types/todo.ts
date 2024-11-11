@@ -1,5 +1,5 @@
 interface TodoType {
-  id: number;
+  id?: number;
   todo: string;
   label: string;
   date: Date;
