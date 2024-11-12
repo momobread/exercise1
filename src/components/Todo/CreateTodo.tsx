@@ -1,7 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled';
+import toast from 'react-hot-toast';
 import { type SubmitHandler, useForm, Controller } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '../../ui/Button';
 import { TodoType } from '../../types/todo';
 import DatePicker from 'react-datepicker';
@@ -10,12 +11,14 @@ import 'react-datepicker/dist/react-datepicker.css';
 import FormInput from '../../ui/FormInput';
 import { css } from '@emotion/react';
 import { makeTodo } from '../../service/apiTodo';
+import useCabinStore from '../../stores/cabin';
 
 const CreateTodoLayout = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
   align-items: center;
+  margin-top: 20px;
 
   input {
     width: 300px;
@@ -28,7 +31,7 @@ const CreateTodoLayout = styled.div`
     display: flex;
     align-items: center;
     gap: 10px;
-    width: 60%;
+    width: 80%;
     flex-direction: column;
     border: 2px solid #3c3633;
     border-radius: 5px;
@@ -48,19 +51,21 @@ const CreateTodoLayout = styled.div`
 const PickerStyle = css`
   display: flex;
   gap: 15px;
+  width: 75%;
   label {
     width: 50px;
   }
+  span {
+    color: red;
+  }
 `;
 
-function test(todo: TodoType): void {
-  console.log(todo);
-}
-
 function CreateTodo() {
-  const { register, handleSubmit, control } = useForm<TodoType>();
+  const { register, handleSubmit, control, formState } = useForm<TodoType>();
   const [date, setDate] = useState<Date | null>();
+  const { setIsClickAdd } = useCabinStore();
 
+  const queryClient = useQueryClient();
   //   useMutation<TData, TError, TVariables>: 첫번째 성공반환 타입, 오류반환타입,매개변수 타입
   const { mutate: createTodo } = useMutation<void, Error, TodoType>({
     mutationFn: (todo) => makeTodo(todo),
@@ -68,12 +73,22 @@ function CreateTodo() {
     // 성공 반환타입을 void라고 해도 mutationFn는 기본적으로 Promise를 반환해야된다고 가정한다
     //그래서 Promise.resolve로 동기함수를 감싸줘야한다
     // -> 비동기 함수가 항상 promise를 반환해야할때 사용하는 함수.value값을 즉시 해결된 promise로 반환한다
+    onSuccess: () => {
+      toast.success('투두 생성 성공');
+      queryClient.invalidateQueries({
+        queryKey: ['todo'],
+      });
+    },
+    onError: (error: Error) => {
+      toast.error(error.message);
+    },
   });
 
   const onSubmit: SubmitHandler<TodoType> = (data) => {
     if (typeof data.date === 'string') return;
     const date = dateFormat(data.date);
     createTodo({ ...data, date: date });
+    setIsClickAdd();
   };
 
   function dateFormat(date: Date): string {
@@ -89,14 +104,15 @@ function CreateTodo() {
     return dateFormat;
   }
 
+  console.log(formState.errors);
   return (
     <CreateTodoLayout>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormInput label="todo">
-          <input id="todo" type="text" {...register('todo', { required: '필수 입력 입니다' })} />
+        <FormInput label="todo" error={formState.errors?.todo?.message}>
+          <input id="todo" type="text" {...register('todo', { required: 'required' })} />
         </FormInput>
 
-        <FormInput label="label">
+        <FormInput label="label" error={formState.errors?.label?.message}>
           <input type="text" {...register('label')} id="label" />
         </FormInput>
 
@@ -106,6 +122,7 @@ function CreateTodo() {
           <Controller
             name="date" //name을 설정하여 todotype에 속하는 필드를 넣어야 한다
             control={control}
+            rules={{ required: 'required' }}
             render={({ field }) => (
               // render는 필드객체를 받아 폼과 연결
 
@@ -121,11 +138,13 @@ function CreateTodo() {
               />
             )}
           />
+          {formState.errors?.date?.message && <span>{formState.errors.date.message}</span>}
         </div>
-        <FormInput label="priority">
+        <FormInput label="priority" error={formState.errors?.priority?.message}>
           <input type="text" {...register('priority')} />
         </FormInput>
-        <Button>등록</Button>
+        <Button type="submit">추가하기</Button>
+        {/* 버튼 타입을 submit을 하고 onClick함수를 넣으면 react-hook-form연결이 안된다 */}
       </form>
     </CreateTodoLayout>
   );

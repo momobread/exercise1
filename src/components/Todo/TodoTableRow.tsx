@@ -3,6 +3,7 @@ import { TodoTableRowProps } from '../../types/todo';
 
 function TodoTableRow({ todos }: TodoTableRowProps) {
   const { id, date, label, priority, todo } = todos;
+  // console.log(id);
   return (
     <div key={id}>
       <span>{todo}</span>
