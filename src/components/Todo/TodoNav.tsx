@@ -1,5 +1,3 @@
-import styled from '@emotion/styled';
-
 const TodoNav = function TodoNav() {
   return (
     <div id="Todonav">

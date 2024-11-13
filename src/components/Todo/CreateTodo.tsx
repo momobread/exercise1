@@ -4,16 +4,13 @@ import toast from 'react-hot-toast';
 import { type SubmitHandler, useForm, Controller } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '../../ui/Button';
-import { CreateTodoProps, TodoType } from '../../types/todo';
+import { TodoType } from '../../types/todo';
 import DatePicker from 'react-datepicker';
-import { useEffect, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import FormInput from '../../ui/FormInput';
 import { css } from '@emotion/react';
 import { editTodo, makeTodo } from '../../service/apiTodo';
-import useCabinStore from '../../stores/cabin';
 import useTodoStore from '../../stores/cabin';
-import { FiEdit } from 'react-icons/fi';
 
 const CreateTodoLayout = styled.div`
   display: flex;
@@ -74,7 +71,6 @@ function CreateTodo() {
   const { register, handleSubmit, control, formState } = useForm<TodoType>({
     defaultValues: isClickEdit ? todo : { date: '', label: '', priority: '', todo: '' },
   });
-  const [date, setDate] = useState<Date | null>();
   const queryClient = useQueryClient();
   //   useMutation<TData, TError, TVariables>: 첫번째 성공반환 타입, 오류반환타입,매개변수 타입
 
