@@ -1,37 +1,46 @@
-// @jsxImportSource @emotion
-import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
-import './App.css';
-import { css } from '@emotion/react';
-import styled from '@emotion/styled';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import AppLayout from './ui/AppLayout';
+import TodoPage from './pages/TodoPage';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from 'react-hot-toast';
+
+// 💡나는 보통 쿼클 옵션을 이렇게 쓰는데 또 어떤게 쓰이나?
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 0,
+    },
+  },
+});
 
 function App() {
-  const [count, setCount] = useState(0);
-  //
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <QueryClientProvider client={queryClient}>
+      <Toaster
+        position="top-center"
+        toastOptions={{
+          success: {
+            duration: 3000,
+            style: { backgroundColor: '#EEEDEB' },
+          },
+          error: {
+            duration: 3000,
+            style: { backgroundColor: '#ff0000' },
+          },
+        }}
+      />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<AppLayout />}>
+            <Route index element={<Navigate replace to="homepage" />} />
+            <Route path="homepage" element={<HomePage />} />
+            <Route path="todo" element={<TodoPage />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 }
 
