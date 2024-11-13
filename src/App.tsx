@@ -23,7 +23,7 @@ function App() {
         toastOptions={{
           success: {
             duration: 3000,
-            style: { backgroundColor: '#ffff00' },
+            style: { backgroundColor: '#EEEDEB' },
           },
           error: {
             duration: 3000,

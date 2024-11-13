@@ -1,25 +1,30 @@
 import { create } from 'zustand';
+import { TodoType } from '../types/todo';
 
-interface UseCabinStore {
+interface UseTodoStore {
   isClickAdd: boolean;
-  //   isClickCreate: boolean;
-  //   setIsClickCreate: () => void;
+  isClickEdit: boolean;
+  todo: TodoType;
   setIsClickAdd: () => void;
+  setIsClickEdit: () => void;
+  setTodo: (todo: TodoType) => void;
 }
 
-const useCabinStore = create<UseCabinStore>((set) => ({
+const useTodoStore = create<UseTodoStore>((set) => ({
   isClickAdd: false,
-  //   isClickCreate: false,
+  isClickEdit: false,
+  todo: { date: '', label: '', priority: '', todo: '', id: 0 },
+  setTodo: (todo) => set({ todo: todo }),
   setIsClickAdd: () => {
     set((state) => ({
       isClickAdd: !state.isClickAdd,
     }));
   },
-  //   setIsClickCreate: () => {
-  //     set((state) => ({
-  //       isClickCreate: !state.isClickCreate,
-  //     }));
-  //   },
+  setIsClickEdit: () => {
+    set((state) => ({
+      isClickEdit: !state.isClickEdit,
+    }));
+  },
 }));
 
-export default useCabinStore;
+export default useTodoStore;

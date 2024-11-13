@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 
 const TodoNav = function TodoNav() {
   return (
-    <div>
+    <div id="Todonav">
       <span>Todo</span>
       <span>Label</span>
       <span>Date</span>

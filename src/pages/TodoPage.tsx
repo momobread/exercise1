@@ -8,12 +8,12 @@ import useCabinStore from '../stores/cabin';
 const TodoLayout = styled.section``;
 
 function TodoPage() {
-  const { isClickAdd } = useCabinStore();
+  // const { isClickAdd } = useCabinStore();
   return (
     <TodoLayout>
       <TodoTable />
 
-      {isClickAdd && <CreateTodo />}
+      {/* {isClickAdd && <CreateTodo />} */}
     </TodoLayout>
   );
 }

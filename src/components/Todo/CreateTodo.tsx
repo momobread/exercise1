@@ -4,19 +4,22 @@ import toast from 'react-hot-toast';
 import { type SubmitHandler, useForm, Controller } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '../../ui/Button';
-import { TodoType } from '../../types/todo';
+import { CreateTodoProps, TodoType } from '../../types/todo';
 import DatePicker from 'react-datepicker';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import FormInput from '../../ui/FormInput';
 import { css } from '@emotion/react';
 import { makeTodo } from '../../service/apiTodo';
 import useCabinStore from '../../stores/cabin';
+import useTodoStore from '../../stores/cabin';
+import { FiEdit } from 'react-icons/fi';
 
 const CreateTodoLayout = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+
   align-items: center;
   margin-top: 20px;
 
@@ -31,7 +34,8 @@ const CreateTodoLayout = styled.div`
     display: flex;
     align-items: center;
     gap: 10px;
-    width: 80%;
+    width: 70%;
+    /* max-width: 80%; */
     flex-direction: column;
     border: 2px solid #3c3633;
     border-radius: 5px;
@@ -43,8 +47,12 @@ const CreateTodoLayout = styled.div`
     padding: 5px;
     border-radius: 4px;
   }
-  button {
-    margin: 20px;
+  div {
+    width: fit-content;
+
+    button {
+      margin-right: 10px;
+    }
   }
 `;
 
@@ -60,11 +68,13 @@ const PickerStyle = css`
   }
 `;
 
+// function CreateTodo({ todos }: CreateTodoProps) {
 function CreateTodo() {
-  const { register, handleSubmit, control, formState } = useForm<TodoType>();
+  const { setIsClickAdd, isClickEdit, todo, setIsClickEdit } = useTodoStore();
+  const { register, handleSubmit, control, formState } = useForm<TodoType>({
+    defaultValues: isClickEdit ? todo : { date: '', label: '', priority: '', todo: '' },
+  });
   const [date, setDate] = useState<Date | null>();
-  const { setIsClickAdd } = useCabinStore();
-
   const queryClient = useQueryClient();
   //   useMutation<TData, TError, TVariables>: 첫번째 성공반환 타입, 오류반환타입,매개변수 타입
   const { mutate: createTodo } = useMutation<void, Error, TodoType>({
@@ -87,6 +97,7 @@ function CreateTodo() {
   const onSubmit: SubmitHandler<TodoType> = (data) => {
     if (typeof data.date === 'string') return;
     const date = dateFormat(data.date);
+
     createTodo({ ...data, date: date });
     setIsClickAdd();
   };
@@ -124,17 +135,16 @@ function CreateTodo() {
             control={control}
             rules={{ required: 'required' }}
             render={({ field }) => (
-              // render는 필드객체를 받아 폼과 연결
+              // render는 필드객체를 받아 폼과 연결[훅 폼에서 떨어져 나온 Field]
+              //onChange,value[실제 날짜 값],name[date]등
 
               <DatePicker
-                // {...field} //스프레드 연산자를 통해 폼 필드 객체의 모든 속성을 준다 onChange,value 등
                 dateFormat={'yyyy/MM/dd'}
                 id="date"
                 onChange={(date) => {
-                  setDate(date);
                   field.onChange(date); //react-hook-form값이 업데이트 하도록 설정 폼필드 의 onchange에 date를 업데이트 해주세요
                 }}
-                selected={date}
+                selected={field.value === '' ? undefined : new Date(field.value)}
               />
             )}
           />
@@ -143,8 +153,20 @@ function CreateTodo() {
         <FormInput label="priority" error={formState.errors?.priority?.message}>
           <input type="text" {...register('priority')} />
         </FormInput>
-        <Button type="submit">추가하기</Button>
-        {/* 버튼 타입을 submit을 하고 onClick함수를 넣으면 react-hook-form연결이 안된다 */}
+        <div>
+          {isClickEdit ? <Button type="submit">편집하기</Button> : <Button type="submit">추가하기</Button>}
+
+          {isClickEdit ? (
+            <Button type="button" onClick={() => setIsClickEdit()}>
+              닫기
+            </Button>
+          ) : (
+            <Button type="button" onClick={() => setIsClickAdd()}>
+              닫기
+            </Button>
+          )}
+          {/* 버튼 타입을 submit을 하고 onClick함수를 넣으면 react-hook-form연결이 안된다 */}
+        </div>
       </form>
     </CreateTodoLayout>
   );
