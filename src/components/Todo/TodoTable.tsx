@@ -79,7 +79,7 @@ function TodoTable() {
         {/* {data?.map((todos) => <TodoTableRow todos={todos} key={new Date().getTime()} />)} */}
         {/* 이렇게 고유값을 똑같이하면 버튼을 눌렀을때 getTime이 값이 바껴도 li3개가 한 뭉치로 쳐서 원래 todo[1111]에 버튼을 눌렀을때의 todo[2222]가 추가됬다고 인식한다 */}
         {/* 즉 기존 todo가 단순히 갱신된것이 아니라, 데이터가 똑같지만 고유값이 뭉터기로 달라서 같은 내용이여도 추가됬다고 판단해서 또 똑같은 todo를 보여주는 것이다*/}
-        {data?.map((todo) => <TodoTableRow todo={todo} />)}
+        {data?.map((todo) => <TodoTableRow todo={todo} key={todo.id} />)}
         {!isClickAdd && <Button onClick={handleButton}>추가하기</Button>}
       </TodoTableLayout>
       {/* {isClickAdd && <CreateTodo todos={data} />} */}

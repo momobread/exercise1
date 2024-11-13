@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import FormInput from '../../ui/FormInput';
 import { css } from '@emotion/react';
-import { makeTodo } from '../../service/apiTodo';
+import { editTodo, makeTodo } from '../../service/apiTodo';
 import useCabinStore from '../../stores/cabin';
 import useTodoStore from '../../stores/cabin';
 import { FiEdit } from 'react-icons/fi';
@@ -77,6 +77,7 @@ function CreateTodo() {
   const [date, setDate] = useState<Date | null>();
   const queryClient = useQueryClient();
   //   useMutation<TData, TError, TVariables>: 첫번째 성공반환 타입, 오류반환타입,매개변수 타입
+
   const { mutate: createTodo } = useMutation<void, Error, TodoType>({
     mutationFn: (todo) => makeTodo(todo),
     // mutationFn: (todo) => Promise.resolve(test(todo)),
@@ -93,13 +94,24 @@ function CreateTodo() {
       toast.error(error.message);
     },
   });
+  const { mutate: editMutate } = useMutation<void, Error, TodoType>({
+    mutationFn: (data) => editTodo(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['todo'] });
+    },
+  });
 
   const onSubmit: SubmitHandler<TodoType> = (data) => {
-    if (typeof data.date === 'string') return;
-    const date = dateFormat(data.date);
-
-    createTodo({ ...data, date: date });
-    setIsClickAdd();
+    if (data.id) {
+      editMutate(data);
+      setIsClickEdit();
+    } else {
+      console.log(data);
+      if (typeof data.date === 'string') return; //date가 객체이면
+      const date = dateFormat(data.date);
+      createTodo({ ...data, date: date });
+      setIsClickAdd();
+    }
   };
 
   function dateFormat(date: Date): string {
@@ -115,7 +127,6 @@ function CreateTodo() {
     return dateFormat;
   }
 
-  console.log(formState.errors);
   return (
     <CreateTodoLayout>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -128,7 +139,7 @@ function CreateTodo() {
         </FormInput>
 
         <div css={PickerStyle}>
-          {/* controller는 filed객체를 이용해서 onchange,value 등의 값을 업데이트하는데 필요한 것을 제공 */}
+          {/* controller는 field객체를 이용해서 onchange,value 등의 값을 업데이트하는데 필요한 것을 제공 */}
           <label htmlFor="date">date</label>
           <Controller
             name="date" //name을 설정하여 todotype에 속하는 필드를 넣어야 한다
@@ -136,6 +147,7 @@ function CreateTodo() {
             rules={{ required: 'required' }}
             render={({ field }) => (
               // render는 필드객체를 받아 폼과 연결[훅 폼에서 떨어져 나온 Field]
+              // defaultvalue의 데이이터에서 키값이[name,date 등] 일치하면 value값을 자동으로 넣어주는거같다["청소하기","날짜날짜 객체"]
               //onChange,value[실제 날짜 값],name[date]등
 
               <DatePicker

@@ -25,9 +25,9 @@ function TodoTableRow({ todo }: TodoTableRowProps) {
 
   const handleEdit = (id?: number) => {
     if (id === undefined) return;
-    // setIsClickAdd();
+    console.log(todo);
     setIsClickEdit();
-    editMutate(id);
+    // editMutate(id);
     setTodo({ ...todo, date: new Date(date) });
   };
   const { mutate: deleteMutate } = useMutation<void, Error, number>({
@@ -41,12 +41,12 @@ function TodoTableRow({ todo }: TodoTableRowProps) {
     },
   });
 
-  const { mutate: editMutate } = useMutation<void, Error, number>({
-    mutationFn: (id) => editTodo(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['todo'] });
-    },
-  });
+  // const { mutate: editMutate } = useMutation<void, Error, number>({
+  //   mutationFn: (id) => editTodo(id),
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries({ queryKey: ['todo'] });
+  //   },
+  // });
 
   return (
     <>
