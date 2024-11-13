@@ -4,8 +4,6 @@ import TodoTableRow from './TodoTableRow';
 import { useQuery } from '@tanstack/react-query';
 import { fetchTodos } from '../../service/apiTodo';
 import { Button } from '../../ui/Button';
-import { useEffect, useState } from 'react';
-import { FaS } from 'react-icons/fa6';
 import CreateTodo from './CreateTodo';
 import useTodoStore from '../../stores/cabin';
 

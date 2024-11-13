@@ -1,17 +1,15 @@
 import { TodoTableRowProps } from '../../types/todo';
 import { DeleteOutline, ModeEdit } from '@mui/icons-material';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { deleteTodo, editTodo } from '../../service/apiTodo';
+import { useMutation } from '@tanstack/react-query';
+import { deleteTodo } from '../../service/apiTodo';
 import { useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import useTodoStore from '../../stores/cabin';
-import CreateTodo from './CreateTodo';
-import { useEffect } from 'react';
 
 function TodoTableRow({ todo }: TodoTableRowProps) {
   const { id, date, label, priority, todo: content } = todo;
   const queryClient = useQueryClient();
-  const { setIsClickEdit, isClickEdit, setTodo, setIsClickAdd } = useTodoStore();
+  const { setIsClickEdit, setTodo } = useTodoStore();
 
   // useEffect(() => {
   //   setIsClickAdd();

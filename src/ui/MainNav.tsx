@@ -1,12 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import styled from '@emotion/styled';
-import {
-  HiOutlineCalendarDays,
-  HiOutlineCog6Tooth,
-  HiOutlineHome,
-  HiOutlineHomeModern,
-  HiOutlineUsers,
-} from 'react-icons/hi2';
+import { HiOutlineHome, HiOutlineHomeModern } from 'react-icons/hi2';
 
 const NavList = styled.ul`
   list-style: none;
