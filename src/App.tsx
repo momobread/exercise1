@@ -28,11 +28,11 @@ function App() {
         toastOptions={{
           success: {
             duration: 3000,
-            style: { backgroundColor: '#EEEDEB' },
+            style: { backgroundColor: '#dcfacd' },
           },
           error: {
             duration: 3000,
-            style: { backgroundColor: '#ff0000' },
+            style: { backgroundColor: '#f8d3d3' },
           },
         }}
       />

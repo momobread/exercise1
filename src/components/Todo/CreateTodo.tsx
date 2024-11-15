@@ -57,8 +57,14 @@ const PickerStyle = css`
   display: flex;
   gap: 15px;
   width: 75%;
-  label {
-    width: 50px;
+  div {
+    label {
+      display: inline-block;
+      text-align: center;
+      width: 50px;
+      margin-right: 10px;
+      /* background-color: aqua; */
+    }
   }
   span {
     color: red;
@@ -136,26 +142,28 @@ function CreateTodo() {
 
         <div css={PickerStyle}>
           {/* controller는 field객체를 이용해서 onchange,value 등의 값을 업데이트하는데 필요한 것을 제공 */}
-          <label htmlFor="date">date</label>
-          <Controller
-            name="date" //name을 설정하여 todotype에 속하는 필드를 넣어야 한다
-            control={control}
-            rules={{ required: 'required' }}
-            render={({ field }) => (
-              // render는 필드객체를 받아 폼과 연결[훅 폼에서 떨어져 나온 Field]
-              // defaultvalue의 데이이터에서 키값이[name,date 등] 일치하면 value값을 자동으로 넣어주는거같다["청소하기","날짜날짜 객체"]
-              //onChange,value[실제 날짜 값],name[date]등
+          <div>
+            <label htmlFor="date">date</label>
+            <Controller
+              name="date" //name을 설정하여 todotype에 속하는 필드를 넣어야 한다
+              control={control}
+              rules={{ required: 'required' }}
+              render={({ field }) => (
+                // render는 필드객체를 받아 폼과 연결[훅 폼에서 떨어져 나온 Field]
+                // defaultvalue의 데이이터에서 키값이[name,date 등] 일치하면 value값을 자동으로 넣어주는거같다["청소하기","날짜날짜 객체"]
+                //onChange,value[실제 날짜 값],name[date]등
 
-              <DatePicker
-                dateFormat={'yyyy/MM/dd'}
-                id="date"
-                onChange={(date) => {
-                  field.onChange(date); //react-hook-form값이 업데이트 하도록 설정 폼필드 의 onchange에 date를 업데이트 해주세요
-                }}
-                selected={field.value === '' ? undefined : new Date(field.value)}
-              />
-            )}
-          />
+                <DatePicker
+                  dateFormat={'yyyy/MM/dd'}
+                  id="date"
+                  onChange={(date) => {
+                    field.onChange(date); //react-hook-form값이 업데이트 하도록 설정 폼필드 의 onchange에 date를 업데이트 해주세요
+                  }}
+                  selected={field.value === '' ? undefined : new Date(field.value)}
+                />
+              )}
+            />
+          </div>
           {formState.errors?.date?.message && <span>{formState.errors.date.message}</span>}
         </div>
         <FormInput label="priority" error={formState.errors?.priority?.message}>

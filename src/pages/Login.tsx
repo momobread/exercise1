@@ -8,6 +8,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { UserType } from '../types/user';
 import userLogin from '../components/authentication/Login';
 import useUserStore from '../stores/user';
+import toast from 'react-hot-toast';
 
 const LoginLayout = styled.div`
   width: 100dvw;
@@ -19,29 +20,40 @@ const LoginLayout = styled.div`
     margin-top: 10%;
     position: fixed;
     width: 500px;
-    height: 300px;
+    height: 500px;
     border: 2px solid #e0ccbe;
     border-radius: 7px;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    div:nth-of-type(1) {
-      margin-top: 50px;
-    }
+    padding: 20px 0;
     div {
-      width: 80%;
-      background-color: antiquewhite;
-      label {
-        width: 15%;
-      }
+      width: 90%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: fit-content;
       input {
-        width: 80%;
         height: 35px;
+        width: 80%;
       }
     }
   }
 `;
+
+// div {
+//   width: 80%;
+//   height: 50px;
+//   background-color: antiquewhite;
+//   label {
+//     width: 15%;
+//   }
+//   input {
+//     width: 80%;
+//     /* height: 35px; */
+//   }
+// }
 
 function Login() {
   const { handleSubmit, register, formState } = useForm<UserType>();
@@ -56,16 +68,16 @@ function Login() {
     // 비동기 함수를 호출한 후 값을 쓰려면 handleSubmit에서 호출하는 함수에 async를 붙이면 된다
     const userCheck = await userLogin(data);
     userCheck ? setIsLogined() : '';
-    isLogined ? navigate('/') : navigate('login/join');
+    isLogined ? navigate('/') : toast.error('유효하지 않은 아이디 이거나 비밀번호 입니다');
   };
 
   return (
     <LoginLayout>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormInput label="아이디" error={formState.errors.user_id?.message}>
+        <FormInput label="아이디" error={formState.errors.user_id?.message} type="vertical">
           <input type="text" {...register('user_id', { required: '아이디를 입력해 주세요' })} />
         </FormInput>
-        <FormInput label="비밀번호" error={formState.errors.user_pw?.message}>
+        <FormInput label="비밀번호" error={formState.errors.user_pw?.message} type="vertical">
           <input {...register('user_pw', { required: '비밀번호를 입력해주세요' })} />
         </FormInput>
         <Button type="submit">로그인</Button>

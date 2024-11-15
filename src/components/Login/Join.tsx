@@ -20,12 +20,11 @@ const JoinLayout = styled.div`
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    div:nth-of-type(1) {
-      margin-top: 50px;
-    }
+
     div {
       width: 80%;
       background-color: antiquewhite;
+      display: flex;
       label {
         width: 15%;
       }
@@ -54,7 +53,7 @@ function Join() {
   return (
     <JoinLayout>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormInput label="아이디" type="vertical">
+        <FormInput label="아이디">
           <input id="id" />
         </FormInput>
         <FormInput label="비밀번호">
