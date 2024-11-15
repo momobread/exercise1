@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import styled from '@emotion/styled';
+import { LoginOutlined } from '@mui/icons-material';
 import { HiOutlineHome, HiOutlineHomeModern } from 'react-icons/hi2';
 
 const NavList = styled.ul`
@@ -71,12 +72,13 @@ function MainNav() {
             <span>Todo</span>
           </StyledNavLink>
         </li>
-        {/* <li>
-          <StyledNavLink to="/users">
-            <HiOutlineUsers />
-            <span>Users</span>
+        <li>
+          <StyledNavLink to="/login">
+            <LoginOutlined />
+            <span>Login</span>
           </StyledNavLink>
         </li>
+        {/* 
         <li>
           <StyledNavLink to="/settings">
             <HiOutlineCog6Tooth />
