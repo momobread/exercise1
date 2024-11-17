@@ -35,7 +35,7 @@ const FormInputLayout = styled.div<FormInputLayoutProps>`
     props.type === 'vertical' &&
     css`
       flex-direction: column;
-      background-color: aquamarine;
+      background-color: #d7fadc;
       gap: 2px;
     `}
 `;
