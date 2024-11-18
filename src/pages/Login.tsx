@@ -68,7 +68,7 @@ function Login() {
     // 비동기 함수를 호출한 후 값을 쓰려면 handleSubmit에서 호출하는 함수에 async를 붙이면 된다
     const userCheck = await userLogin(data);
     userCheck ? setIsLogined() : '';
-    isLogined ? navigate('/') : toast.error('유효하지 않은 아이디 이거나 비밀번호 입니다');
+    userCheck ? navigate('/') : toast.error('유효하지 않은 아이디 이거나 비밀번호 입니다');
   };
 
   return (

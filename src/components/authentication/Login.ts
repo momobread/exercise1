@@ -21,6 +21,6 @@ export default async function userLogin(user: UserType) {
   users?.forEach((users) =>
     users.user_id === user.user_id && users.user_pw === user.user_pw ? (isLogined = true) : '',
   );
-  // console.log(isLogined);
+  console.log(isLogined);
   return isLogined;
 }

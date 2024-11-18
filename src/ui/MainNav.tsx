@@ -2,6 +2,7 @@ import { NavLink } from 'react-router-dom';
 import styled from '@emotion/styled';
 import { LoginOutlined } from '@mui/icons-material';
 import { HiOutlineHome, HiOutlineHomeModern } from 'react-icons/hi2';
+import useUserStore from '../stores/user';
 
 const NavList = styled.ul`
   list-style: none;
@@ -51,6 +52,9 @@ const StyledNavLink = styled(NavLink)`
 `;
 
 function MainNav() {
+  const { isLogined } = useUserStore();
+  const LogOut = useUserStore((state) => state.LogOut);
+
   return (
     <nav>
       <NavList>
@@ -72,12 +76,18 @@ function MainNav() {
             <span>Todo</span>
           </StyledNavLink>
         </li>
-        <li>
-          <StyledNavLink to="/login">
-            <LoginOutlined />
-            <span>Login</span>
-          </StyledNavLink>
-        </li>
+        {isLogined ? (
+          <li onClick={() => LogOut()}>
+            <span style={{ color: 'blue' }}>Log Out</span>
+          </li>
+        ) : (
+          <li>
+            <StyledNavLink to="/login">
+              <LoginOutlined />
+              <span>Login</span>
+            </StyledNavLink>
+          </li>
+        )}
         {/* 
         <li>
           <StyledNavLink to="/settings">

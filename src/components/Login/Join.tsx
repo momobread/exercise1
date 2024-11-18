@@ -4,9 +4,10 @@ import { useForm } from 'react-hook-form';
 import { Button } from '../../ui/Button';
 import { useMutation } from '@tanstack/react-query';
 import { UserType } from '../../types/user';
-import { isValid } from 'react-datepicker/dist/date_utils';
-import isValidateDate from '../../utils/checkDate';
 import isValidDate from '../../utils/checkDate';
+import { userJoinApi } from '../../service/apiUser';
+import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 const JoinLayout = styled.div`
   width: 100dvw;
   height: 1080px;
@@ -45,7 +46,13 @@ const JoinLayout = styled.div`
 `;
 
 function Join() {
+  const navigate = useNavigate();
   const { handleSubmit, register, formState } = useForm<UserType>();
+  const { mutate: joinUser, isPending } = useMutation<void, Error, UserType>({
+    mutationFn: (user) => userJoinApi(user),
+    onSuccess: () => navigate('/login'),
+    onError: (e) => toast.error(e.message),
+  });
 
   // const {} = useMutation({
   //   mutationFn: () => {},
@@ -56,8 +63,8 @@ function Join() {
     //user_date같은 경우는 onSubmit에서 다시 Date형식으로 맞춰야 된다
     // 그럼에도 불구하고 제네릭에 타입을 명시하는 이유는 이유는 타입 안전성을 확보하고, 입력값과 관련된 자동 완성 기능 및 유효성 검사를 제공하기 위함
     console.log('제출');
-    console.log(value);
-    console.log(typeof value.user_birth);
+    // console.log(value);
+    joinUser(value);
   };
 
   return (
